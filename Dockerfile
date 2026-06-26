@@ -32,11 +32,11 @@
 FROM alpine:3.22
 
 # === INSTALACIÓN DE PAQUETES ===
-# Cada RUN es una capa nueva → imagen más grande, cache ineficiente
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        python3 \
-    && rm -rf /var/lib/apt/lists/*
+# Cada RUN es una capa nueva → imagen más grande, cache ineficiente 
+# RUN apt-get update && \    Falla en Alpine por usa apk no apt-get
+#    apt-get install -y --no-install-recommends \
+#        python3 \
+#    && rm -rf /var/lib/apt/lists/*
 # RUN apt-get update
 # RUN apt-get install -y openssl
 # Se han quitado estos paquetes inseguros (curl, wget) ya no pasan el escaneo de Trivy (CVE's críticas)
