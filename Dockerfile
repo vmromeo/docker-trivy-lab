@@ -33,10 +33,10 @@ FROM alpine:3.22
 
 # === INSTALACIÓN DE PAQUETES ===
 # Cada RUN es una capa nueva → imagen más grande, cache ineficiente 
-# RUN apt-get update && \    Falla en Alpine por usa apk no apt-get
-#    apt-get install -y --no-install-recommends \
-#        python3 \
-#    && rm -rf /var/lib/apt/lists/*
+RUN adduser -D -u 1001 appuser && \
+    mkdir -p /var/www/html && \
+    chown -R appuser:appuser /var/www/html
+
 # RUN apt-get update
 # RUN apt-get install -y openssl
 # Se han quitado estos paquetes inseguros (curl, wget) ya no pasan el escaneo de Trivy (CVE's críticas)
@@ -47,13 +47,13 @@ FROM alpine:3.22
 
 # === USUARIO ===
 # TODO: Crear usuario no-root y cambiar a él
-RUN adduser -m -u 1001 appuser
 
 # === SECRETOS (MALÍSIMA PRÁCTICA) ===
 # TODO: Eliminar completamente esta línea
 # RUN echo 'SECRET_KEY=super_secret_key_123' > /root/.env
 
-COPY index.html /var/www/html/index.html
+COPY --chown=appuser:appuser index.html /var/www/html/index.html
+
 WORKDIR /var/www/html
 # === INFORMACIÓN DEL SISTEMA ===
 # TODO: Eliminar esta línea (no debe quedar rastro del host)
@@ -66,7 +66,7 @@ USER appuser
 # TODO: Reemplazar por un comando seguro
 # CMD ["sh", "-c", "while true; do nc -l -p 80 -e /bin/bash; done"]
 # CMD ["python3", "-m", "http.server", "80"]
-CMD ["busybox", "httpd", "-f", "-p", "80", "-h", "/var/www/html"]
+CMD ["busybox", "httpd", "-f", "-p", "8080", "-h", "/var/www/html"]
 
 # =============================================
 # RESUMEN DE CAMBIOS RECOMENDADOS:
