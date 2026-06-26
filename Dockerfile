@@ -47,7 +47,7 @@ FROM alpine:3.22
 
 # === USUARIO ===
 # TODO: Crear usuario no-root y cambiar a él
-RUN useradd -m -u 1001 appuser
+RUN adduser -m -u 1001 appuser
 
 # === SECRETOS (MALÍSIMA PRÁCTICA) ===
 # TODO: Eliminar completamente esta línea
