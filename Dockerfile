@@ -28,7 +28,8 @@
 # === IMAGEN BASE ===
 # TODO: Cambiar esta imagen base (debian:13-slim es más moderna y segura)
 # FROM debian:11-slim
-FROM debian:13-slim
+# FROM debian:13-slim falla
+FROM alpine:3.22
 
 # === INSTALACIÓN DE PAQUETES ===
 # Cada RUN es una capa nueva → imagen más grande, cache ineficiente
@@ -64,7 +65,8 @@ USER appuser
 # === COMANDO DE INICIO ===
 # TODO: Reemplazar por un comando seguro
 # CMD ["sh", "-c", "while true; do nc -l -p 80 -e /bin/bash; done"]
-CMD ["python3", "-m", "http.server", "80"]
+# CMD ["python3", "-m", "http.server", "80"]
+CMD ["busybox", "httpd", "-f", "-p", "80", "-h", "/var/www/html"]
 
 # =============================================
 # RESUMEN DE CAMBIOS RECOMENDADOS:
